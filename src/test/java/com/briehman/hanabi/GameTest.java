@@ -68,8 +68,8 @@ public class GameTest {
 
     @Test(expected=RuleException.class)
     public void sixPlayersCannotPlay() {
-        for(int i = 0; i < 6; i++)
-            g.addPlayer(p1);
+        g.addPlayers(players);
+        g.addPlayer(new Player("Notgonnaplay"));
         g.start();
     }
 
@@ -86,19 +86,19 @@ public class GameTest {
         g.start(); // removes hand cards from the deck, creates discards
         // player.hint generates a hint which the game takes
         // player.discard(card) discards a card
-        g.turn(new HintTurn(p1, new ColorHint(p1, p2, RED)));
+        g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
         assertEquals(1, g.turns().size());
         try {
-            g.turn(new HintTurn(p1, new NumberHint(p1, p2, 1)));
+            g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
             fail("Cannot play two turns in a row!");
         }
         catch (OutOfTurnException e) {}
 
-        g.turn(new HintTurn(p2, new NumberHint(p2, p1, 1)));
+        g.turn(new HintTurn(p2, new NumberHint(p1, 1)));
         assertEquals(2, g.turns().size());
 
         // and they cycle back to the beginning
-        g.turn(new HintTurn(p1, new NumberHint(p1, p2, 1)));
+        g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
         assertEquals(3, g.turns().size());
     }
 
@@ -107,42 +107,33 @@ public class GameTest {
         twoPersonSetUp();
         int numTurns = g.getHintsLeft() / 2;
         for (int i = 0; i < numTurns; i++) {
-            g.turn(new HintTurn(p1, new ColorHint(p1, p2, RED)));
-            g.turn(new HintTurn(p2, new NumberHint(p2, p1, 1)));
+            g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
+            g.turn(new HintTurn(p2, new NumberHint(p1, 1)));
         }
         assertEquals(0, g.getHintsLeft());
-        g.turn(new HintTurn(p1, new ColorHint(p1, p2, RED)));
+        g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
     }
 
     @Test
-    public void cannotGiveHintsIfNoneLeft() {
-        twoPersonSetUp();
-
-        for (int i = 0; i < 8; i++) {
-            g.turn(new HintTurn(p1, new ColorHint(p1, p2, RED)));
-        }
-        assertEquals(7, g.getHintsLeft());
-    }
-
-    @Test
-    public void playersCanPlayCards() {
+    public void playersCanDiscardCards() {
         g.addPlayers(p1, p2);
-        g.start(); // removes hand cards from the deck, creates discards
+        g.start();
+        // removes hand cards from the deck, creates discards
         // player.hint generates a hint which the game takes
         // player.discard(card) discards a card
-        g.turn(new HintTurn(p1, new ColorHint(p1, p2, RED)));
+        g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
         assertEquals(1, g.turns().size());
         try {
-            g.turn(new HintTurn(p1, new NumberHint(p1, p2, 1)));
+            g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
             fail("Cannot play two turns in a row!");
         }
         catch (OutOfTurnException e) {}
 
-        g.turn(new HintTurn(p2, new NumberHint(p2, p1, 1)));
+        g.turn(new HintTurn(p2, new NumberHint(p1, 1)));
         assertEquals(2, g.turns().size());
 
         // and they cycle back to the beginning
-        g.turn(new HintTurn(p1, new NumberHint(p1, p2, 1)));
+        g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
         assertEquals(3, g.turns().size());
     }
 }

@@ -1,10 +1,6 @@
 package com.briehman.hanabi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import static com.briehman.hanabi.Action.*;
+import java.util.*;
 
 public class Game {
     private static final int STARTING_HINTS = 8;
@@ -13,6 +9,7 @@ public class Game {
     private static final int MAX_PLAYERS = 5;
 
     private List<Player> players = new ArrayList<>();
+    private Map<Player, Hand> hands = new HashMap<>();
     private List<Turn> turnHistory = new ArrayList<>();
     private Deck deck = new Deck();
 
@@ -33,15 +30,31 @@ public class Game {
             players.add(p);
     }
 
-    public List<Player> getPlayers() {
-        return Collections.unmodifiableList(players);
-    }
-
     public void start() {
         if (players.size() < MIN_PLAYERS || players.size() > MAX_PLAYERS)
             throw new RuleException("2 - 5 players allowed");
+
+        initializeHands();
         currentPlayer = 0;
         isStarted = true;
+    }
+
+    private void initializeHands() {
+        int handSize = handSize();
+        for(Player player : players) {
+            if (!hands.containsKey(player)) {
+                hands.put(player, deck.drawHand(handSize));
+            }
+        }
+    }
+
+    public int handSize() {
+        if (players.size() < 4) {
+            return 5;
+        }
+        else {
+            return 4;
+        }
     }
 
     public void addPlayers(Player... players) {
@@ -53,10 +66,27 @@ public class Game {
             addPlayer(p);
     }
 
-    public void turn(Turn turn) {
-        if (turn.getPlayer() != players.get(currentPlayer)) {
-            throw new OutOfTurnException(turn.getPlayer());
+    public void addPlayer(Player player, Hand hand) {
+        addPlayer(player);
+        for (Card card : hand.cards()) {
+            if (!deck.remove(card))
+                throw new RuleException(String.format("No more %s cards left in the deck to remove!", card));
         }
+
+        hands.put(player, hand);
+    }
+
+    public void addPlayers(Map<Player, Hand> players) {
+        for (Map.Entry<Player, Hand> entry : players.entrySet()) {
+            Player player = entry.getKey();
+            Hand hand = entry.getValue();
+            addPlayer(player, hand);
+        }
+    }
+
+    public void turn(Turn turn) {
+        if (turn.getPlayer() != players.get(currentPlayer))
+            throw new OutOfTurnException(turn.getPlayer());
 
         turn.validate(this);
         turnHistory.add(turn);
@@ -72,7 +102,6 @@ public class Game {
     public int getHintsLeft() {
         return hintsLeft;
     }
-
     public void useHint() {
         hintsLeft--;
     }

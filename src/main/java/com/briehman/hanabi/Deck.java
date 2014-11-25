@@ -1,10 +1,14 @@
 package com.briehman.hanabi;
 
+import com.briehman.hanabi.deck.OutOfCardsException;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Deck {
-    List<Card> cards = new ArrayList<>();
+    private List<Card> cards = new ArrayList<>();
 
     public Deck() {
         for (Color color : Color.values()) {
@@ -24,5 +28,40 @@ public class Deck {
 
             cards.add(new Card(color, 5));
         }
+        shuffle();
+    }
+
+    public int getNumCardsLeft() {
+        return cards.size();
+    }
+
+    public Card draw() {
+        if (getNumCardsLeft() == 0)
+            throw new OutOfCardsException();
+        else
+            return cards.remove(0);
+    }
+
+    private void shuffle() {
+        Collections.shuffle(cards);
+    }
+
+    public Hand drawHand(int numCards) {
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < numCards; i++)
+            cards.add(draw());
+        return new Hand(cards);
+    }
+
+    public boolean remove(Card card) {
+        for (Iterator<Card> it = cards.iterator(); it.hasNext();) {
+            Card c = it.next();
+            if (c.equals(card)) {
+                it.remove();
+                return true;
+            }
+        }
+
+        return false;
     }
 }

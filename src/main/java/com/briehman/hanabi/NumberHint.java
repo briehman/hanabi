@@ -4,8 +4,8 @@ public class NumberHint extends Hint {
     private String TYPE = "NUMBER";
     private int number;
 
-    public NumberHint(Player sender, Player receiver, int number) {
-        super(sender, receiver);
+    public NumberHint(Player receiver, int number) {
+        super(receiver);
         this.number = number;
     }
 
@@ -16,6 +16,6 @@ public class NumberHint extends Hint {
 
     @Override
     public String toString() {
-        return String.format("%s -> %s: %s", sender, receiver, type());
+        return String.format("-> %s: %s", receiver, type());
     }
 }

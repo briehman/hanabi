@@ -4,8 +4,8 @@ public class ColorHint extends Hint {
     private String TYPE = "COLOR";
     private Color color;
 
-    public ColorHint(Player sender, Player receiver, Color color) {
-        super(sender, receiver);
+    public ColorHint(Player receiver, Color color) {
+        super(receiver);
         this.color = color;
     }
 
@@ -16,6 +16,6 @@ public class ColorHint extends Hint {
 
     @Override
     public String toString() {
-        return String.format("%s -> %s: %s", sender, receiver, type());
+        return String.format("-> %s: %s", receiver, type());
     }
 }
