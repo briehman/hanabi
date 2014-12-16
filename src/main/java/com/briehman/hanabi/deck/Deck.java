@@ -1,6 +1,6 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.deck;
 
-import com.briehman.hanabi.deck.OutOfCardsException;
+import com.briehman.hanabi.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +29,10 @@ public class Deck {
             cards.add(new Card(color, 5));
         }
         shuffle();
+    }
+
+    public boolean hasCardLeft() {
+        return getNumCardsLeft() > 0;
     }
 
     public int getNumCardsLeft() {

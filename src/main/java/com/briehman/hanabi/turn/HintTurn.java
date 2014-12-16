@@ -1,4 +1,8 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.turn;
+
+import com.briehman.hanabi.*;
+import com.briehman.hanabi.hint.Hint;
+import com.briehman.hanabi.hint.OutOfHintsException;
 
 import static com.briehman.hanabi.Action.HINT;
 
@@ -12,6 +16,7 @@ public class HintTurn extends Turn {
         this.hint = hint;
     }
 
+    public Player player() { return player; }
     public Hint hint() { return hint; }
 
     @Override

@@ -1,7 +1,11 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.turn;
+
+import com.briehman.hanabi.Action;
+import com.briehman.hanabi.Game;
+import com.briehman.hanabi.Player;
 
 public abstract class Turn {
-    private final Player player;
+    protected final Player player;
     private final Action action;
 
     public Turn(Player p, Action action) {

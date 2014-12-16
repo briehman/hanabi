@@ -1,36 +1,21 @@
 package com.briehman.hanabi.deck;
 
-import com.briehman.hanabi.Card;
-import com.briehman.hanabi.Hand;
 import com.briehman.hanabi.RuleException;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static com.briehman.hanabi.Color.*;
 
 public class HandTest {
     @Test
-    public void mustHaveFourOrFiveCards() {
-        try {
-            new Hand(new Card(RED, 1));
-            fail("Cannot create single card hand");
-        }
-        catch (RuleException e) {}
+    public void canHaveFiveOrLessCards() {
+        new Hand(new Card(RED, 1));
 
-        try {
-            new Hand(new Card(RED, 1),
-                    new Card(BLUE, 1));
-            fail("Cannot create two card hand");
-        }
-        catch (RuleException e) {}
+        new Hand(new Card(RED, 1),
+                new Card(BLUE, 1));
 
-        try {
-            new Hand(new Card(RED, 1),
-                    new Card(BLUE, 1),
-                    new Card(GREEN, 1));
-            fail("Cannot create three card hand");
-        }
-        catch (RuleException e) {}
+        new Hand(new Card(RED, 1),
+                new Card(BLUE, 1),
+                new Card(GREEN, 1));
 
         new Hand(new Card(RED, 1),
                 new Card(BLUE, 1),
@@ -44,6 +29,17 @@ public class HandTest {
                 new Card(WHITE, 1));
     }
 
+    @Test(expected=RuleException.class)
+    public void cannotHaveSixCards() {
+        new Hand(new Card(RED, 1),
+                    new Card(BLUE, 1),
+                    new Card(GREEN, 1),
+                    new Card(YELLOW, 1),
+                    new Card(WHITE, 1),
+                    new Card(WHITE, 1));
+    }
+
+    /*
     @Test
     public void cannotAddTooManyCardsInHand() {
         Hand h = new Hand(new Card(RED, 1),
@@ -86,4 +82,5 @@ public class HandTest {
         }
         catch (RuleException e) {}
     }
+    */
 }

@@ -1,12 +1,7 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.deck;
 
-import com.briehman.hanabi.deck.OutOfCardsException;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.*;
 import static com.briehman.hanabi.Color.*;
@@ -56,5 +51,4 @@ public class DeckTest {
         assertTrue(d.remove(new Card(RED, 5)));
         assertFalse(d.remove(new Card(RED, 5)));
     }
-
 }

@@ -1,4 +1,6 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.hint;
+
+import com.briehman.hanabi.Player;
 
 public abstract class Hint {
     protected Player receiver;

@@ -1,4 +1,7 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.hint;
+
+import com.briehman.hanabi.Color;
+import com.briehman.hanabi.Player;
 
 public class ColorHint extends Hint {
     private String TYPE = "COLOR";
@@ -13,6 +16,8 @@ public class ColorHint extends Hint {
     public String type() {
         return TYPE;
     }
+
+    public Color color() { return color; }
 
     @Override
     public String toString() {

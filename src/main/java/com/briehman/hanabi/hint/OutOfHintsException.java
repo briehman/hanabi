@@ -1,5 +1,7 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.hint;
 
+
+import com.briehman.hanabi.RuleException;
 
 public class OutOfHintsException extends RuleException {
     public OutOfHintsException() {

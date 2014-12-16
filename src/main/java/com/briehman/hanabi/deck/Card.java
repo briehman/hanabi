@@ -1,5 +1,6 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.deck;
 
+import com.briehman.hanabi.Color;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

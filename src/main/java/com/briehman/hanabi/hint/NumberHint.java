@@ -1,4 +1,6 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.hint;
+
+import com.briehman.hanabi.Player;
 
 public class NumberHint extends Hint {
     private String TYPE = "NUMBER";
@@ -13,6 +15,8 @@ public class NumberHint extends Hint {
     public String type() {
         return TYPE;
     }
+
+    public int number() { return number; }
 
     @Override
     public String toString() {

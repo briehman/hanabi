@@ -1,5 +1,10 @@
 package com.briehman.hanabi;
 
+import com.briehman.hanabi.deck.Card;
+import com.briehman.hanabi.hint.ColorHint;
+import com.briehman.hanabi.hint.NumberHint;
+import com.briehman.hanabi.turn.HintTurn;
+import com.briehman.hanabi.turn.OutOfTurnException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,18 +17,12 @@ import static com.briehman.hanabi.Color.*;
 
 public class GameTest {
     private Game g;
-    //private Player p1 = new Player("Brian", new Hand(c(YELLOW, 3), c(GREEN, 3), c(GREEN, 2), c(RED, 2), c(YELLOW, 4)));
     private Player p1 = new Player("Brian");
-    //private Player p2 = new Player("Katie", new Hand(c(BLUE, 4), c(WHITE, 3), c(WHITE, 2), c(YELLOW, 1), c(YELLOW, 1)));
     private Player p2 = new Player("Katie");
     private Player p3 = new Player("Steve");
     private Player p4 = new Player("Trent");
     private Player p5 = new Player("Samantha");
     private List<Player> players = new ArrayList<>();
-
-    private Card c(Color color, int number) {
-        return new Card(color, 1);
-    }
 
     @Before
     public void setup() {
@@ -82,12 +81,11 @@ public class GameTest {
 
     @Test
     public void turnsMustGoInOrder() {
-        g.addPlayers(p1, p2);
+        g.addPlayers(p1, p2, p3);
         g.start(); // removes hand cards from the deck, creates discards
         // player.hint generates a hint which the game takes
         // player.discard(card) discards a card
         g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
-        assertEquals(1, g.turns().size());
         try {
             g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
             fail("Cannot play two turns in a row!");
@@ -95,45 +93,46 @@ public class GameTest {
         catch (OutOfTurnException e) {}
 
         g.turn(new HintTurn(p2, new NumberHint(p1, 1)));
-        assertEquals(2, g.turns().size());
+
+        g.turn(new HintTurn(p3, new NumberHint(p2, 1)));
 
         // and they cycle back to the beginning
-        g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
-        assertEquals(3, g.turns().size());
+        g.turn(new HintTurn(p1, new NumberHint(p3, 1)));
     }
 
-    @Test(expected=OutOfHintsException.class)
-    public void hintsGetUsedUp() {
+    @Test(expected=OutOfTurnException.class)
+    public void outOfOrderTurnsFail() {
+        g.addPlayers(p1, p2, p3);
+        g.start(); // removes hand cards from the deck, creates discards
+        // player.hint generates a hint which the game takes
+        // player.discard(card) discards a card
+        g.turn(new HintTurn(p2, new ColorHint(p1, RED)));
+    }
+
+    @Test(expected=GameOverException.class)
+    public void cannotTakeTurnsWhenGameOver() {
         twoPersonSetUp();
-        int numTurns = g.getHintsLeft() / 2;
-        for (int i = 0; i < numTurns; i++) {
-            g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
-            g.turn(new HintTurn(p2, new NumberHint(p1, 1)));
-        }
-        assertEquals(0, g.getHintsLeft());
+        g.bomb();
+        g.bomb();
+        g.bomb();
         g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
     }
 
     @Test
-    public void playersCanDiscardCards() {
-        g.addPlayers(p1, p2);
-        g.start();
-        // removes hand cards from the deck, creates discards
-        // player.hint generates a hint which the game takes
-        // player.discard(card) discards a card
-        g.turn(new HintTurn(p1, new ColorHint(p2, RED)));
-        assertEquals(1, g.turns().size());
-        try {
-            g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
-            fail("Cannot play two turns in a row!");
+    public void scoreZeroToStart() {
+        twoPersonSetUp();
+        assertEquals(0, g.getScore());
+    }
+
+    @Test
+    public void winningGameScoreCorrect() {
+        twoPersonSetUp();
+        for (Color color : Color.values()) {
+            for (int i = 0; i < 5; i++) {
+                g.getPlayPile().get(color).push(new Card(color, i));
+            }
         }
-        catch (OutOfTurnException e) {}
 
-        g.turn(new HintTurn(p2, new NumberHint(p1, 1)));
-        assertEquals(2, g.turns().size());
-
-        // and they cycle back to the beginning
-        g.turn(new HintTurn(p1, new NumberHint(p2, 1)));
-        assertEquals(3, g.turns().size());
+        assertEquals(25, g.getScore());
     }
 }

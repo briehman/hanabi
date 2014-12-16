@@ -1,5 +1,8 @@
-package com.briehman.hanabi;
+package com.briehman.hanabi.turn;
 
+
+import com.briehman.hanabi.GameException;
+import com.briehman.hanabi.Player;
 
 public class OutOfTurnException extends GameException {
     private Player player;
