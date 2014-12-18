@@ -1,86 +1,66 @@
 package com.briehman.hanabi.deck;
 
+import com.briehman.hanabi.Color;
+import com.briehman.hanabi.Player;
 import com.briehman.hanabi.RuleException;
+import com.briehman.hanabi.hint.ColorHint;
+import com.briehman.hanabi.hint.Hint;
+import com.briehman.hanabi.hint.NumberHint;
 import org.junit.Test;
 
 import static com.briehman.hanabi.Color.*;
+import static org.junit.Assert.*;
 
 public class HandTest {
     @Test
     public void canHaveFiveOrLessCards() {
-        new Hand(new Card(RED, 1));
+        new Hand(c(RED, 1));
 
-        new Hand(new Card(RED, 1),
-                new Card(BLUE, 1));
+        new Hand(c(RED, 1),
+                c(BLUE, 1));
 
-        new Hand(new Card(RED, 1),
-                new Card(BLUE, 1),
-                new Card(GREEN, 1));
+        new Hand(c(RED, 1),
+                c(BLUE, 1),
+                c(GREEN, 1));
 
-        new Hand(new Card(RED, 1),
-                new Card(BLUE, 1),
-                new Card(GREEN, 1),
-                new Card(YELLOW, 1));
+        new Hand(c(RED, 1),
+                c(BLUE, 1),
+                c(GREEN, 1),
+                c(YELLOW, 1));
 
-        new Hand(new Card(RED, 1),
-                new Card(BLUE, 1),
-                new Card(GREEN, 1),
-                new Card(YELLOW, 1),
-                new Card(WHITE, 1));
+        new Hand(c(RED, 1),
+                c(BLUE, 1),
+                c(GREEN, 1),
+                c(YELLOW, 1),
+                c(WHITE, 1));
     }
 
     @Test(expected=RuleException.class)
     public void cannotHaveSixCards() {
-        new Hand(new Card(RED, 1),
-                    new Card(BLUE, 1),
-                    new Card(GREEN, 1),
-                    new Card(YELLOW, 1),
-                    new Card(WHITE, 1),
-                    new Card(WHITE, 1));
+        new Hand(c(RED, 1),
+                    c(BLUE, 1),
+                    c(GREEN, 1),
+                    c(YELLOW, 1),
+                    c(WHITE, 1),
+                    c(WHITE, 1));
     }
 
-    /*
     @Test
-    public void cannotAddTooManyCardsInHand() {
-        Hand h = new Hand(new Card(RED, 1),
-                new Card(BLUE, 1),
-                new Card(GREEN, 1),
-                new Card(YELLOW, 1),
-                new Card(WHITE, 1));
-
-        try {
-            h.add(new Card(RED, 2));
+    public void canAddHintsToHand() {
+        Hand hand = new Hand(c(RED, 1),
+                c(BLUE, 1),
+                c(GREEN, 1),
+                c(YELLOW, 1),
+                c(WHITE, 1));
+        Player p = new Player("one", hand);
+        Hint hint = new NumberHint(p, 1);
+        hand.addHint(hint);
+        for (Card card : hand.cards()) {
+            assertTrue(card.getHints().contains(hint));
         }
-        catch (RuleException e) {}
     }
 
-    @Test
-    public void canDiscardAndAdd() {
-        Hand h = new Hand(new Card(RED, 1),
-                new Card(BLUE, 1),
-                new Card(GREEN, 1),
-                new Card(YELLOW, 1),
-                new Card(WHITE, 1));
-
-        h.discard(1);
-        h.add(new Card(BLUE, 2));
+    private Card c(Color color, int number) {
+        return new Card(color, number);
     }
-
-    @Test
-    public void cannotDiscardNothing() {
-        Hand h = new Hand(new Card(RED, 1),
-                new Card(BLUE, 1),
-                new Card(GREEN, 1),
-                new Card(YELLOW, 1));
-
-        h.discard(0);
-        h.discard(0);
-        h.discard(0);
-        h.discard(0);
-        try {
-            h.discard(0);
-        }
-        catch (RuleException e) {}
-    }
-    */
 }

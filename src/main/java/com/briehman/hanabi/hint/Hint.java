@@ -1,6 +1,7 @@
 package com.briehman.hanabi.hint;
 
 import com.briehman.hanabi.Player;
+import com.briehman.hanabi.deck.Card;
 
 public abstract class Hint {
     protected Player receiver;
@@ -15,4 +16,10 @@ public abstract class Hint {
 
     @Override
     abstract public String toString();
+
+    abstract boolean matches(Card card);
+
+    public void send() {
+        receiver.getHand().addHint(this);
+    }
 }

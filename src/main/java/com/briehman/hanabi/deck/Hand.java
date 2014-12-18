@@ -1,6 +1,7 @@
 package com.briehman.hanabi.deck;
 
 import com.briehman.hanabi.RuleException;
+import com.briehman.hanabi.hint.Hint;
 
 import java.util.*;
 
@@ -50,5 +51,15 @@ public class Hand {
 
     public void add(Card card) {
         cards.add(card);
+    }
+
+    public List<Card> cards() {
+        return Collections.unmodifiableList(cards);
+    }
+
+    public void addHint(Hint hint) {
+        for (Card card : cards) {
+            card.addHint(hint);
+        }
     }
 }
