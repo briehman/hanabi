@@ -31,6 +31,30 @@ public class Deck {
         shuffle();
     }
 
+    public int getNumberCards(int number) {
+        if (number <= 0 || number > 5)
+            throw new IllegalArgumentException("Card number invalid");
+
+        if (number == 1)
+            return 3;
+        else if (number > 1 && number < 5)
+            return 2;
+        else
+            return 1;
+    }
+
+    public int getNumberCards(Color color) {
+        return 10;
+    }
+
+    public int getNumberColors() {
+        return 5;
+    }
+
+    public int totalCards() {
+        return 50;
+    }
+
     public boolean hasCardLeft() {
         return getNumCardsLeft() > 0;
     }
@@ -67,5 +91,14 @@ public class Deck {
         }
 
         return false;
+    }
+
+    public boolean remove(Hand hand) {
+        for (Card card : hand.cards()) {
+            if (!remove(card)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

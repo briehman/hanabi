@@ -58,6 +58,9 @@ public class Game {
             if (player.getHand() == null) {
                 player.setHand(deck.drawHand(handSize));
             }
+            else if (!deck.remove(player.getHand())) {
+                throw new RuleException("Could not find cards to remove from deck");
+            }
         }
     }
 
@@ -118,5 +121,21 @@ public class Game {
         for (Stack<Card> cards: playPile.values())
             score += cards.size();
         return score;
+    }
+
+    public List<Player> getPlayers() {
+        return Collections.unmodifiableList(players);
+    }
+
+    public Collection<Card> getPlayedCards() {
+        Set<Card> playedCards = new HashSet<>();
+        for (Stack cards : playPile.values()) {
+            playedCards.addAll(cards);
+        }
+        return Collections.unmodifiableSet(playedCards);
+    }
+
+    public Collection<Card> getDiscardedCards() {
+        return Collections.unmodifiableList(discardPile);
     }
 }
